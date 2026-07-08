@@ -1,6 +1,6 @@
 'use strict';
 
-const POLL_INTERVAL = 10000;
+const POLL_INTERVAL = 5000;
 const ATRASO_MS = 5 * 60 * 1000;
 let pollTimer = null;
 
@@ -194,7 +194,8 @@ async function iniciarPreparo(btn) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         removerCard(id, 'grid-aguardando', 'badge-aguardando', 'empty-aguardando');
-        await carregarPreparo();
+        await atualizar();
+        iniciarPolling();
     } catch (err) {
         console.error('Erro ao iniciar preparo:', err);
         btn.disabled = false;
@@ -218,6 +219,8 @@ async function marcarPronto(btn) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         removerCard(id, 'grid-preparo', 'badge-preparo', 'empty-preparo');
+        await atualizar();
+        iniciarPolling();
     } catch (err) {
         console.error('Erro ao marcar como pronto:', err);
         btn.disabled = false;
